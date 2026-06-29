@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure Game - Mai's World</title>
+    <style>
+        /* --- ĐOẠN MỚI THÊM: ẨN CHUỘT VÀ TẠO HÌNH CON CÁ --- */
+        *, *::before, *::after, body {
+            cursor: none !important;
+        }
+        .fish-cursor {
+            position: fixed;
+            width: 150px;
+            height: auto;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s ease-out;
+        }
+        /* ------------------------------------------------ */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff5eb;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(230, 126, 34, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #e67e22;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .project-img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #e67e22;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THẺ CON CÁ -->
+    <img src="assets/avatar.png" class="fish-cursor" id="fishCursor">
+
+    <div class="container">
+        <h1>🎮 Adventure Game</h1>
+        <div style="display: flex; justify-content: center; gap: 10px; margin: -10px 0 25px 0; flex-wrap: wrap;">
+            <span style="background: #e1f5fe; color: #0288d1; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; border: 1px solid #b3e5fc;">👤 Project Lead</span>
+            <span style="background: #ede7f6; color: #5e35b1; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; border: 1px solid #d1c4e9;">💻 Game Programmer</span>
+            <span style="background: #e8f5e9; color: #2e7d32; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; border: 1px solid #c8e6c9;">🔧 Game Designer</span>
+        </div>
+        <img class="project-img" src="assets/cavameo.png" alt="Adventure Game">
+        <p>
+            CAVAMEO is a 2D educational puzzle-adventure game that blends exploration with mathematics. Players overcome challenges by solving math puzzles, encouraging logical thinking and problem-solving through an immersive gameplay experience.
+        </p>
+        <div class="video-container">
+            <iframe
+                src="https://www.youtube.com/embed/nzNtra9L1J4"
+                title="Adventure Game Demo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>
+        </div>    
+        <a href="index.html" class="back-btn">⬅ Quay lại Thế giới</a>
+    </div>
+
+    <!-- SCRIPT ĐIỀU KHIỂN CÁ -->
+    <script>
+        const fish = document.getElementById('fishCursor');
+        let lastX = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            fish.style.left = e.clientX + 'px';
+            fish.style.top = e.clientY + 'px';
+
+            if (e.clientX < lastX) {
+                fish.style.transform = 'translate(-50%, -50%) scaleX(-1)';
+            } else if (e.clientX > lastX) {
+                fish.style.transform = 'translate(-50%, -50%) scaleX(1)';
+            }
+            lastX = e.clientX;
+        });
+    </script>
+</body>
+</html>

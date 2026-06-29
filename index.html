@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mai's World</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- ĐƯA CSS MENU LÊN HEAD ĐỂ TRÁNH LÀM VỠ LAYOUT BODY -->
+    <style>
+        #taskboard-nav {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            background: rgba(0, 0, 0, 0.2); /* Dùng nền tối nhẹ thay cho backdrop-filter để tránh lỗi vỡ góc */
+            padding: 15px 0 !important;
+            z-index: 99999 !important;
+            display: flex !important;
+            justify-content: center !important;
+            gap: 40px !important;
+            font-family: 'Segoe UI', -apple-system, sans-serif !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+        .nav-item-simple {
+            color: #ffffff !important; 
+            text-decoration: none !important;
+            font-size: 1.1rem !important; 
+            font-weight: 600 !important; 
+            letter-spacing: 0.8px !important;
+            opacity: 0.8 !important; 
+            transition: opacity 0.2s ease, transform 0.2s ease !important;
+            display: inline-block !important;
+        }
+        .nav-item-simple:hover {
+            opacity: 1 !important; 
+            transform: translateY(-1px) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ==================== TASKBOARD TỐI GIẢN TRÊN CÙNG ==================== -->
+<div id="taskboard-nav">
+    <a href="robot.html" class="nav-item-simple">Robot Lab</a>
+    <a href="adventure.html" class="nav-item-simple">Adventure</a>
+    <a href="ai.html" class="nav-item-simple">AI Playground</a>
+    <a href="awards.html" class="nav-item-simple">Awards</a>
+    <a href="#contact-section" onclick="document.getElementById('contact-section').scrollIntoView({behavior: 'smooth'}); return false;" class="nav-item-simple">Contact</a>
+</div>
+<!-- ====================================================================== -->
+
+<!--================ LOADING =================-->
+<div id="loading-screen">
+    <h1>Loading Mai's World...</h1>
+    <div class="loading-bar">
+        <div class="progress"></div>
+    </div>
+</div>
+
+<!--================ MUSIC =================-->
+<button id="music-btn">🎵 Music</button>
+
+<!--================ SKY =================-->
+<div class="sky">
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+</div>
+
+<!--================ PARTICLES =================-->
+<div id="particles"></div>
+
+<!-- BẢNG CHỈ DẪN DI CHUYỂN MỚI THÊM -->
+<div id="movement-tutorial" style="position: fixed; bottom: 20px; left: 20px; background: rgba(0,0,0,0.7); color: white; padding: 15px; border-radius: 10px; font-size: 14px; z-index: 9999; pointer-events: none; line-height: 1.5;">
+    🎮 <b>Hướng dẫn di chuyển:</b><br>
+    • Dùng phím <b>W, A, S, D</b> hoặc <b>Mũi tên</b><br>
+    • Đến gần tòa nhà và nhấn <b>SPACE</b> để vào!
+</div>
+
+<!--================ HERO =================-->
+<section id="hero">
+    <h1>Welcome to <span>Mai's World</span></h1>
+    <p>Game Developer • Robotics • AI Education</p>
+    <button id="startBtn">Start Adventure →</button>
+</section>
+
+<!--================ CHARACTER =================-->
+<section id="character">
+    <div class="avatar">
+        <div class="player-pointer">
+            <span class="pointer-text">it's you!</span>
+            <div class="pointer-arrow">👇</div>
+        </div>
+        <img src="assets/avatar.png">
+    </div>
+</section>
+
+<!--================ MAP =================-->
+<section id="world">
+    <h2>Explore My World</h2>
+    <div class="map">
+        <div class="building" onclick="openAbout()">
+            🏡
+            <h3>About Me</h3>
+        </div>
+
+        <div class="building" onclick="openRobot()">
+            🚗
+            <h3>Robot Lab</h3>
+        </div>
+
+        <div class="building" onclick="openAdventure()">
+            🎮
+            <h3>Adventure Game</h3>
+        </div>
+
+        <div class="building" onclick="openAI()">
+            🤖
+            <h3>AI Playground</h3>
+        </div>
+
+        <div class="building" onclick="openAwards()">
+            🏆
+            <h3>Awards</h3>
+        </div>
+
+        <div class="building" onclick="document.getElementById('contact-section').scrollIntoView({behavior: 'smooth'});">
+            📮
+            <h3>Contact</h3>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== GỘP SMOOTH SMOOTH SECTION: ABOUT ME & WHAT I DO (ĐÃ BỔ SUNG GAME DEV) ==================== -->
+<section id="about" style="
+    background: #fff9f5; /* Đồng bộ một màu nền duy nhất chạy xuyên suốt */
+    color: #5c4d46; 
+    padding: 100px 20px; 
+    position: relative; 
+    font-family: 'Quicksand', 'Segoe UI', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 120px; /* Tạo khoảng cách rộng rãi giữa 2 khối */
+">
+    <!-- Các đốm sáng mây pastel bồng bềnh dùng chung cho cả trang -->
+    <div style="position: absolute; width: 500px; height: 500px; background: rgba(255, 182, 193, 0.25); filter: blur(120px); top: 5%; left: -100px; pointer-events: none;"></div>
+    <div style="position: absolute; width: 500px; height: 500px; background: rgba(255, 224, 178, 0.35); filter: blur(120px); top: 40%; right: -100px; pointer-events: none;"></div>
+    <div style="position: absolute; width: 400px; height: 400px; background: rgba(187, 222, 251, 0.25); filter: blur(100px); bottom: 5%; left: 10%; pointer-events: none;"></div>
+
+    <!-- Khởi tạo các CSS hiệu ứng mượt và hít thở -->
+    <style>
+        /* Hiệu ứng thở của bé tóc hồng lá sen */
+        @keyframes cuteBreathing {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-12px) scale(1.02); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+        .cute-avatar-smooth {
+            max-width: 100%;
+            height: auto;
+            max-height: 350px;
+            animation: cuteBreathing 4s ease-in-out infinite;
+            image-rendering: pixelated;
+        }
+
+        /* Class nền tảng cho hiệu ứng lướt tới đâu hiện hình tới đó */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        /* Khi lướt trúng, JavaScript sẽ tự động thêm class này để hiện hình */
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Style hộp Accordion dễ thương */
+        .pastel-box {
+            position: relative;
+            padding: 25px 30px;
+            background: #ffffff;
+            border: 2px solid #ffe0d8;
+            border-radius: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(255, 111, 97, 0.02);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+        }
+        .pastel-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(255, 111, 97, 0.06);
+        }
+        .pastel-box.active {
+            border-color: #ffb7b2;
+            background: #fffefd;
+        }
+
+        /* Chi tiết ẩn xổ bên trong */
+        .pastel-details {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease, margin-top 0.3s ease;
+        }
+        .pastel-box.active .pastel-details {
+            max-height: 800px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+        .pastel-box.active .mini-arrow {
+            transform: rotate(180deg);
+            color: #ff8a80;
+        }
+
+        .pastel-tag-item {
+            display: inline-block;
+            background: #fff0ed;
+            color: #ff7b6e;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            margin: 4px;
+            font-weight: 600;
+            border: 1px solid #ffe0da;
+        }
+    </style>
+
+
+    <!-- ================= KHỐI 1: ABOUT ME ================= -->
+    <div class="scroll-reveal" style="max-width: 1000px; width: 100%; display: flex; gap: 60px; align-items: center; flex-wrap: wrap;">
+        <!-- Bên trái Khối 1: Ảnh của bạn đang thở nhẹ nhàng -->
+        <div style="flex: 1; min-width: 280px; text-align: center;">
+            <img src="assets/pixel-girl.png" class="cute-avatar-smooth" alt="My Pixel Character">
+        </div>
+        
+        <!-- Bên phải Khối 1: Đoạn giới thiệu bản thân nhẹ nhàng -->
+        <div style="flex: 1.5; min-width: 320px;">
+            <h2 style="font-size: 2.5rem; font-weight: 800; color: #ff7666; margin: 0 0 15px 0;">🌸 ABOUT ME</h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; color: #6d4c41; margin: 0;">
+                Computer Science student passionate about Game Development, Artificial Intelligence, and Computer Vision. I enjoy building intelligent and interactive systems that combine creativity with technology.
+            </p>
+        </div>
+    </div>
+
+
+    <!-- Dải phân cách vô hình hoặc lượn sóng mờ nhẹ mắt thường khó nhận ra -->
+    <div style="width: 100%; height: 2px; background: linear-gradient(to right, transparent, rgba(255,183,178,0.2), transparent);"></div>
+
+
+    <!-- ================= KHỐI 2: WHAT I DO (XỔ ACCORDION - ĐÃ BỔ SUNG GAME DEV) ================= -->
+    <div class="scroll-reveal" style="max-width: 1000px; width: 100%; display: flex; flex-direction: column; gap: 35px;">
+        
+        <!-- Tiêu đề khối 2 -->
+        <div style="text-align: center;">
+            <h2 style="font-size: 2.5rem; font-weight: 800; color: #ff7666; margin: 0 0 10px 0;">✨ WHAT I DO</h2>
+            <p style="font-size: 1rem; color: #8d6e63; margin: 0;">Những lĩnh vực công nghệ mình đang tự tay phát triển hàng ngày</p>
+        </div>
+
+        <!-- Các hộp nội dung bo tròn lớn -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Hộp AI -->
+            <div class="pastel-box" onclick="togglePastelAccordion(this)">
+                <div style="position: absolute; top: 12px; left: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-left: 2px solid #ffb7b2;"></div>
+                <div style="position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-right: 2px solid #ffb7b2;"></div>
+                <div class="mini-arrow" style="position: absolute; right: 30px; top: 28px; font-size: 1rem; color: #bcaaa4; transition: transform 0.3s;">▼</div>
+
+                <h3 style="font-size: 1.35rem; font-weight: 700; margin: 0 0 4px 0; color: #ff7666;">🧠 AI & DATA SCIENCE</h3>
+                <h4 style="font-size: 0.9rem; color: #8d6e63; font-weight: 500; margin: 0;">Machine Learning & Computer Vision</h4>
+                
+                <div class="pastel-details">
+                    <p style="font-size: 0.95rem; color: #6d4c41; line-height: 1.6; margin: 0 0 12px 0;">
+                        Tập trung xây dựng các mô hình học máy thông minh và thuật toán xử lý hình ảnh tự động giúp nhận diện vật thể linh hoạt.
+                    </p>
+                    <div class="pastel-tag-item">👁️ AI Playground System</div>
+                    <div class="pastel-tag-item">🤖 Object Detection Model</div>
+                </div>
+            </div>
+
+            <!-- Hộp Robot -->
+            <div class="pastel-box" onclick="togglePastelAccordion(this)">
+                <div style="position: absolute; top: 12px; left: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-left: 2px solid #ffb7b2;"></div>
+                <div style="position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-right: 2px solid #ffb7b2;"></div>
+                <div class="mini-arrow" style="position: absolute; right: 30px; top: 28px; font-size: 1rem; color: #bcaaa4; transition: transform 0.3s;">▼</div>
+
+                <h3 style="font-size: 1.35rem; font-weight: 700; margin: 0 0 4px 0; color: #ff7666;">🚗 ROBOTICS & HARDWARE</h3>
+                <h4 style="font-size: 0.9rem; color: #8d6e63; font-weight: 500; margin: 0;">Embedded Systems & Assembly</h4>
+                
+                <div class="pastel-details">
+                    <p style="font-size: 0.95rem; color: #6d4c41; line-height: 1.6; margin: 0 0 12px 0;">
+                        Lập trình vi điều khiển, thiết kế bảng mạch nhúng và tỉ mỉ tối ưu hóa phần cứng cho hệ thống mô hình tự hành độc lập.
+                    </p>
+                    <div class="pastel-tag-item">🏎️ Micromouse Self-Driving</div>
+                    <div class="pastel-tag-item">🔧 Robot Lab Embedded Control</div>
+                </div>
+            </div>
+
+            <!-- Hộp Game Development (MỚI BỔ SUNG) -->
+            <div class="pastel-box" onclick="togglePastelAccordion(this)">
+                <div style="position: absolute; top: 12px; left: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-left: 2px solid #ffb7b2;"></div>
+                <div style="position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-top: 2px solid #ffb7b2; border-right: 2px solid #ffb7b2;"></div>
+                <div class="mini-arrow" style="position: absolute; right: 30px; top: 28px; font-size: 1rem; color: #bcaaa4; transition: transform 0.3s;">▼</div>
+
+                <h3 style="font-size: 1.35rem; font-weight: 700; margin: 0 0 4px 0; color: #ff7666;">🎮 GAME DEVELOPMENT</h3>
+                <h4 style="font-size: 0.9rem; color: #8d6e63; font-weight: 500; margin: 0;">2D/3D Interactive Gameplay Logic</h4>
+                
+                <div class="pastel-details">
+                    <p style="font-size: 0.95rem; color: #6d4c41; line-height: 1.6; margin: 0 0 12px 0;">
+                        Lập trình tư duy logic game, thiết kế màn chơi và tối ưu hiệu năng đồ họa. Xây dựng thế giới tương tác sinh động với lối chơi lôi cuốn độc đáo.
+                    </p>
+                    <div class="pastel-tag-item">🐟 Adventure Canvas Game</div>
+                    <div class="pastel-tag-item">🕹️ Godot Mechanics Simulation</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================= SCRIPT LOGIC JAVASCRIPT (ĐÓNG MỞ & CUỘN MƯỢT) ================= -->
+<script>
+    // 1. Hàm đóng mở Accordion
+    function togglePastelAccordion(cardElement) {
+        const isOpen = cardElement.classList.contains('active');
+        document.querySelectorAll('.pastel-box').forEach(card => card.classList.remove('active'));
+        if (!isOpen) {
+            cardElement.classList.add('active');
+        }
+    }
+
+    // 2. Logic theo dõi cuộn chuột (Intersection Observer) giúp lướt web đổi hiệu ứng siêu mượt ẩn hiện
+    document.addEventListener("DOMContentLoaded", function() {
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible'); // Thêm class hiện hình khi cuộn tới
+                }
+            });
+        }, {
+            threshold: 0.15 // Hiện hình khi 15% diện tích khối lọt vào màn hình
+        });
+
+        revealElements.forEach(el => observer.observe(el));
+    });
+</script>
+<!--================ SKILLS =================-->
+<section id="skills">
+    <h2>Skill Tree</h2>
+
+    <div class="skill-tree">
+        <!-- Programming -->
+        <div class="node">C++</div>
+        <div class="node">Python</div>
+        <div class="node">JavaScript</div>
+        <div class="node">Git</div>
+        <div class="node">Problem Solving</div>
+
+        <!-- Game Dev -->
+        <div class="node">Game Development</div>
+        <div class="node">Godot Engine</div>
+        <div class="node">Game Design</div>
+        <div class="node">Gameplay Programming</div>
+
+        <!-- AI / Vision -->
+        <div class="node">Artificial Intelligence</div>
+        <div class="node">Computer Vision</div>
+        <div class="node">OpenCV (Basic)</div>
+
+        <!-- Robotics / Embedded -->
+        <div class="node">Robotics</div>
+        <div class="node">Micromouse</div>
+        <div class="node">Line Following Robot</div>
+        <div class="node">Embedded Systems</div>
+
+        <!-- Hardware -->
+        <div class="node">Circuit Design</div>
+        <div class="node">Electronics Assembly</div>
+        <div class="node">Soldering</div>
+    </div>
+</section>
+
+<!-- ================= CONG CONTACT (LIÊN HỆ) ================= -->
+<div id="contact-section" style="background: #1a252f; color: white; padding: 60px 20px; text-align: center; font-family: 'Segoe UI', sans-serif;">
+    <h2 style="color: #4fc3f7; font-size: 2.2rem; margin-bottom: 10px;">📩 Contact Me</h2>
+    <p style="color: #b0bec5; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6;">
+        Bạn có ý tưởng hay hoặc muốn cùng hợp tác trong các dự án Robot và AI sắp tới? Hãy để lại lời nhắn hoặc kết nối trực tiếp với mình qua mạng xã hội nhé!
+    </p>
+    
+    <div style="max-width: 500px; margin: 0 auto; background: #2c3e50; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 30px;">
+        <form onsubmit="alert('Cảm ơn bạn đã gửi tin nhắn! Mình sẽ phản hồi sớm nhất.'); return false;">
+            <input type="text" placeholder="Tên của bạn" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: none; border-radius: 6px; box-sizing: border-box; background: #34495e; color: white; font-size: 1rem;">
+            <input type="email" placeholder="Email liên hệ" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: none; border-radius: 6px; box-sizing: border-box; background: #34495e; color: white; font-size: 1rem;">
+            <textarea placeholder="Lời nhắn của bạn..." rows="4" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: none; border-radius: 6px; box-sizing: border-box; background: #34495e; color: white; font-size: 1rem; resize: none;"></textarea>
+            <button type="submit" style="background: #4fc3f7; color: #1a252f; border: none; padding: 12px 30px; font-weight: bold; border-radius: 6px; cursor: pointer; font-size: 1rem; width: 100%; transition: 0.3s;">Gửi tin nhắn</button>
+        </form>
+    </div>
+
+    <div style="display: block; margin-top: 20px; font-size: 1.1rem; line-height: 2;">
+        <div style="margin-bottom: 10px;">
+            <span style="color: #ff8a80; font-weight: bold;">📧 Gmail:</span> 
+            <a href="mailto:vmai7359@gmail.com" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #ff8a80; margin-left: 5px;">vmai7359@gmail.com</a>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <span style="color: #1877f2; font-weight: bold;">🔵 Facebook:</span> 
+            <a href="https://www.facebook.com/mia.vu.concahaha/" target="_blank" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #1877f2; margin-left: 5px;">fb.com/MiaVu</a>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <span style="color: #e1306c; font-weight: bold;">Github:</span> 
+            <a href="https://github.com/miamei531" target="_blank" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #e1306c; margin-left: 5px;">miamei531</a>
+        </div>
+    </div>
+</div>
+
+<!--================ FOOTER =================-->
+<footer>
+    Made with ❤️ by Mai
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
